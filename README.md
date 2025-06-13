@@ -1,5 +1,120 @@
+
 # 🚀 Go Log Metrics Pipeline
 
+A Go project demonstrating concurrency patterns using a log processing pipeline that emits Prometheus metrics.
+
+---
+
+## 🔧 Features
+
+- 🧵 Go channels & goroutines (pipeline concurrency pattern)
+- 🪵 Simulated log streaming (or replace with Kafka/file)
+- 📦 JSON parsing + filtering (e.g., by log level)
+- 📊 Prometheus metrics export (`/metrics`)
+- 🛠 Makefile for easy local dev
+- 🐳 Docker Compose setup for Prometheus + Grafana
+
+---
+
+## ▶️ Getting Started
+
+### 1. Install Dependencies
+
+```bash
+go mod tidy
+```
+
+### 2. Run the App
+
+```bash
+make run
+```
+
+Visit: [http://localhost:2112/metrics](http://localhost:2112/metrics)
+
+---
+
+### 3. Start Prometheus + Grafana (Optional)
+
+```bash
+make prometheus-up
+```
+
+- Prometheus: [http://localhost:9090](http://localhost:9090)
+- Grafana: [http://localhost:3000](http://localhost:3000) (admin/admin)
+
+---
+
+### 4. Stop Monitoring Stack
+
+```bash
+make prometheus-down
+```
+
+---
+
+## 🧭 Architecture Diagram
+
+This project uses a concurrency pipeline in Golang to process logs and expose metrics via Prometheus.
+
+![Pipeline Architecture](./flow.png)
+
+---
+
+## ✅ How to Verify the Project
+
+Follow these steps to ensure the log processing pipeline and metrics are working correctly:
+
+### 1. Run the Go Application
+
+```bash
+make run
+```
+
+You should see:
+
+```
+Prometheus metrics exposed on :2112/metrics
+```
+
+### 2. Open the Metrics Endpoint
+
+Visit: http://localhost:2112/metrics
+
+You should see:
+
+```
+log_entries_total{level="error"} <some number>
+```
+
+### 3. Watch the Metrics Update
+
+Refresh every few seconds. The counter will increase as more logs are processed.
+
+### 4. (Optional) Launch Prometheus + Grafana
+
+```bash
+make prometheus-up
+```
+
+- Prometheus: http://localhost:9090 (query: `log_entries_total`)
+- Grafana: http://localhost:3000 (admin/admin)
+
+### 5. (Optional) Debug Log Flow Internally
+
+Use `fmt.Println(...)` in:
+
+- `tailer.go` → log emitted
+- `parser.go` → log parsed
+- `filter.go` → log passed
+
+### 6. Stop All
+
+```bash
+make prometheus-down
+```
+
+---
 
 ## 🧠 Learn Go Concurrency: The Pipeline Pattern
 
@@ -42,27 +157,6 @@ Each stage is fully concurrent and communicates via channels.
 
 ---
 
-This pattern is widely used in real-world systems like:
-- Log processors
-- Stream transformers
-- ETL pipelines
-- Event dispatchers
+## 📚 License
 
-## 🔧 Features
-- 🧵 Go channels & goroutines
-- 🪵 Simulated log streaming
-- 📦 JSON parsing + filtering
-- 📊 Prometheus metrics export
-
-## ▶️ Quickstart
-
-### 1. Install dependencies
-```bash
-go mod tidy
-```
-
-## 🧭 Architecture Diagram
-
-This project uses a concurrency pipeline in Golang to process logs and expose metrics via Prometheus.
-![Pipeline Architecture](./flow.png)
-
+MIT
